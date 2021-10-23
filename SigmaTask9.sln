@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31729.503
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SigmaTask9", "SigmaTask9.csproj", "{380AE74B-C8A2-47FB-A5DC-C7768D8C083F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{380AE74B-C8A2-47FB-A5DC-C7768D8C083F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{380AE74B-C8A2-47FB-A5DC-C7768D8C083F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{380AE74B-C8A2-47FB-A5DC-C7768D8C083F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{380AE74B-C8A2-47FB-A5DC-C7768D8C083F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9A43D5FA-ECF3-470D-832A-B3AE3229FE9F}
+	EndGlobalSection
+EndGlobal
