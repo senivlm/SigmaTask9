@@ -18,12 +18,13 @@ namespace SigmaTask9.ForStorage
         public delegate void InCorrectDataHandler(Storage storage, string pathToLog,string message);
 
 
-        //подія при виводі перевіряти спорені продукти
+        //подія при виводі перевіряти спорені продукти------------
         public event SpoiledProductsHandler OnShowStorage;
-        //подія при неправильних даних
+        //подія при неправильних даних---------------------------------
         public event InCorrectDataHandler OnIncorrectInput;
         //шлях до лог файлу
         public string PathToLogFile { get; private set; }
+
 
         List<Product> products;
         //властивість
