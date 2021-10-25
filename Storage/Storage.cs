@@ -7,10 +7,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SigmaTask9
+namespace SigmaTask9.Storage
 {
+    
     class Storage
     {
+
+
+
+
+
+
         List<Product> products;
         //властивість
         public List<Product> Products => products;
@@ -27,7 +34,7 @@ namespace SigmaTask9
             this.products = new List<Product>(prod_arr);
         }
 
-        //швидка ініціаліція------------
+        //швидка ініціалізація------------
         public void QuickInit()
         {
             products.Add(new Product(new DateTime(2021, 3, 12), 3.21, 3.3, "Waterlemon", 30));
@@ -36,6 +43,40 @@ namespace SigmaTask9
             products.Add(new Meat(new DateTime(2021, 10, 20), 10, 0.5, "NA", 30, 1, 2));
             products.Add(new DairyProduct(new DateTime(2021, 10, 2), 5, 0.5, "Milk", 30));
         }
+
+        //додати елемент-------------------------
+        public void Add(Product item)
+        {
+            //якщо нема елемента, додати
+            if(!Products.Contains(item))
+            {
+                this.products.Add(item);
+            }
+            //інаше нічого
+            else
+            {
+                Console.WriteLine("Product {0} is already added",item.NameOfProduct);
+            }
+        }
+        //видалити елемент через ім'я-----------
+        public bool RemoveByName(string name)
+        {
+            //результат видалення
+            //true, якщо змогло видалити
+            bool result = false;
+            for(int i =0; i< Products.Count;i++)
+            {
+                Product curProd = (Product)this.products[i];
+                if(curProd.NameOfProduct.ToLower().Equals(name.ToLower()))
+                {
+                    this.products.RemoveAt(i);
+                    result = true;
+                    break;
+                }
+            }
+            return result;
+        }
+
         //зчитати з консолі------------------------------------
         public void ReadFromConsole()
         {
@@ -64,6 +105,7 @@ namespace SigmaTask9
                     Console.WriteLine("Wrong input");
                     input = Console.ReadLine();
                 }
+                //м'ясний
                 if (variety == 1)
                 {
                     //створюємо об'єкт з отриманих даних і додаємо в масив
@@ -82,6 +124,7 @@ namespace SigmaTask9
             }
         }
 
+        //опрацювання на ріні класи------------------
         private Meat ReadMeat()
         {
             string input;
@@ -262,34 +305,31 @@ namespace SigmaTask9
             {
                 using (StreamReader r = new StreamReader(path))
                 {
-                    //кількість рядків 
-                    string line = r.ReadLine();
-                    int rows;
-                    if (!Int32.TryParse(line, out rows))
-                    {
-                        throw new ArgumentException("Wrong Rows input");
-                    }
+                    string line;
                     //оновлюємо розмір масиву
                     products.Clear();
 
                     //зчитуємо поки не буде кінця файлу
-                    for (int i = 0; i < rows; i++)
+                    while ((line = r.ReadLine())!=null)
                     {
-                        line = r.ReadLine();
                         //визначити який тип продукту нам записали
                         int elements = line.Split().Length;
+
                         //якщо дано 5 елементів, то це клас Product
                         //Product і DairyProduct однакові, у обох є термін придатності
                         if (elements == 5)
                         {
+                            //попередньо створюємо об'єкт касу в списку
                             products.Add(new Product());
-                            products[i].Parse(line);
+                            //міняємо цей об'єкт
+                            //у нас є функція приведення стрічки у об'єкти класу
+                            products[products.Count-1].Parse(line);
                         }
                         //якщо 6 елем, то це класс Meat
                         else if (elements == 6)
                         {
-                            products.Add(new Product());
-                            products[i].Parse(line);
+                            products.Add(new Meat());
+                            products[products.Count - 1].Parse(line);
                         }
                         else
                         {
@@ -307,38 +347,22 @@ namespace SigmaTask9
         //перевіряє дати пригодністі всіх елементів у storage-------------
         public void CheckExpirationDate(string pathToWrite)
         {
-            //зберігає індекси, що треба знищити
-            int[] indexesToRemove = new int[products.Count];
-            int cout = 0;
-            for (int i = 0; i < products.Count; i++)
+            using (StreamWriter writer = new StreamWriter(pathToWrite,append:true))
             {
-                //Substract порінює дві дати і вертає різницю між ними у TimeSpan
-                //Порівнюємо з теперішньою датою
-                TimeSpan difference = DateTime.Now.Subtract(this[i].CreationDay);
-                //отримує скільки днів минуло
-                int daysPassed = (int)difference.TotalDays;
-                //якщо термін пригодністі сплив
-                //додаємо у список на вилучення
-                if (daysPassed > products[i].ExpirationDay)
+                for (int i = 0; i < this.products.Count; i++)
                 {
-                    indexesToRemove[cout] = i;
-                    cout++;
-                }
-            }
-            //вилучаємо просрочені елементи
-            //і записуємо їх у файл
-            using (StreamWriter writer = new StreamWriter(pathToWrite))
-            {
-                for (int i = 0; i < cout; i++)
-                {
-                    writer.WriteLine(products[indexesToRemove[i]]);
-                    //видаляємо з масиву просрочені продукти через where
-                    products = (List<Product>)products.Where((source, index) => index != indexesToRemove[i]);
-                    //зменшуємо індекси для вилучення
-                    //оскільки масив зменшився
-                    for (int k = i + 1; k < cout; k++)
+                    //Substract порінює дві дати і вертає різницю між ними у TimeSpan
+                    //Порівнюємо з теперішньою датою
+                    TimeSpan difference = DateTime.Now.Subtract(this.products[i].CreationDay);
+                    //отримує скільки днів минуло
+                    int daysPassed = (int)difference.TotalDays;
+                    //якщо термін пригодністі сплив
+                    //зписуємо у файл і вилучаємо
+                    if (daysPassed > this.products[i].ExpirationDay)
                     {
-                        indexesToRemove[k]--;
+                        writer.WriteLine(this.products[i]);
+                        writer.WriteLine("Removed at Date: {0},\t Time: {1}\n",DateTime.Now.ToShortDateString(), DateTime.Now.ToShortTimeString());
+                        RemoveByName(this.products[i].NameOfProduct);
                     }
                 }
             }

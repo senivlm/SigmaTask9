@@ -13,8 +13,19 @@ namespace SigmaTask9.Products
     class Meat : Product
     {
         public MeatCategories Category { get; set; }
-        //тип м'яса одночасно є і його ім'ям
         private MeatTypes type;
+        //тип м'яса одночасно є і його ім'ям
+        //властивість
+        public MeatTypes Type
+        {
+            get { return this.type; }
+            set
+            {
+                this.type = value;
+                NameOfProduct = Enum.GetName(typeof(MeatTypes), type);
+            }
+        }
+
 
 
         //Конструктор має ціну, вагу, категорію і тип м'яса
@@ -49,16 +60,7 @@ namespace SigmaTask9.Products
 
         }
 
-        //властивість
-        public MeatTypes Type
-        {
-            get { return this.type; }
-            set
-            {
-                this.type = value;
-                NameOfProduct = Enum.GetName(typeof(MeatTypes), type);
-            }
-        }
+        
         //Equal
         public override bool Equals(object obj)
         {
@@ -73,9 +75,8 @@ namespace SigmaTask9.Products
             string s_type = NameOfProduct;
             string s_category = Enum.GetName(typeof(MeatCategories), Category);
             string str_date = CreationDay.ToShortDateString();
-            string res = "Type: " + s_type + "\t Category: " + s_category + "\nPrice: $" + PriceOfProduct +
-                "\tWeight: " + WeightOfProduct + "kg" + "\nDate of creation " + str_date +
-                "\tExpiration day " + this.ExpirationDay + "\tClass: " + this.GetType();
+            string res = string.Format("Type: {0}\tCategory: {1}\nPrice: {2:f2}$\tWeight: {3:f2}kg\nDate of creation: {4}\tExpiration day: {5}",
+                 s_type, s_category, PriceOfProduct, WeightOfProduct, str_date, ExpirationDay);
             return res;
         }
         //змінити ціну 
