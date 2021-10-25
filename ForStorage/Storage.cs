@@ -106,7 +106,7 @@ namespace SigmaTask9.ForStorage
             for (int counter = 0; counter < sizeOfArr; counter++)
             {
                 //вибираємо варіант класу product
-                Console.WriteLine("Choose variety: 1->Meat\t 2->Dairy Product\t 3->Product");
+                Console.WriteLine(string.Format("Choose variety: 1->Meat\t2->Dairy Product\t3->Product"));
                 input = Console.ReadLine();
                 if((!Int32.TryParse(input, out variety)) || (variety < 1) || (variety > 3))
                 {
@@ -126,7 +126,6 @@ namespace SigmaTask9.ForStorage
                     {
                         OnIncorrectInput?.Invoke(this,PathToLogFile, ex.Message);
                     }
-                    
                 }
                 //молочні
                 else if (variety == 2)
@@ -140,7 +139,6 @@ namespace SigmaTask9.ForStorage
                     {
                         OnIncorrectInput?.Invoke(this,PathToLogFile, ex.Message);
                     }
-                    
                 }
                 //звичайний
                 else
@@ -154,13 +152,9 @@ namespace SigmaTask9.ForStorage
                     {
                         OnIncorrectInput?.Invoke(this, PathToLogFile, ex.Message);
                     }
-                    
                 }
             }
         }
-
-        
-        
 
         //отримати інформацію з файлу--------------------
         public void ReadFromFile(string path)
@@ -170,7 +164,7 @@ namespace SigmaTask9.ForStorage
                 using (StreamReader r = new StreamReader(path))
                 {
                     string line;
-                    //оновлюємо розмір масиву
+                    //оновлюємо список
                     products.Clear();
 
                     //зчитуємо поки не буде кінця файлу
@@ -184,7 +178,7 @@ namespace SigmaTask9.ForStorage
                         if (elements == 5)
                         {
                             //попередньо створюємо об'єкт касу в списку
-                            //міняємо цей об'єкт у нас є функція приведення стрічки у об'єкти класу
+                            //міняємо цей об'єкт, у нас є функція приведення стрічки у об'єкти класу
                             try
                             {
                                 products.Add(new Product());

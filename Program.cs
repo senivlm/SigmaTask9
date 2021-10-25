@@ -18,9 +18,9 @@ namespace SigmaTask9
             stor1.OnShowStorage += CheckSpoiledProducts;
             stor1.OnIncorrectInput += CheckWhatToDo;
 
-            stor1.ReadFromFile(pathRead);
+            //stor1.ReadFromFile(pathRead);
 
-            //stor1.ReadProductsFromConsole();
+            stor1.ReadProductsFromConsole();
             
 
             Console.WriteLine(stor1);
@@ -87,7 +87,6 @@ namespace SigmaTask9
         //правильні ввід через консоль-----------------------------
         public static void CorrectInput(Storage storage)
         {
-
             //буде 3 спроби
             int attempts = 3;
             while(attempts >0)
@@ -95,6 +94,7 @@ namespace SigmaTask9
                 string input;
                 Console.WriteLine("\nEnter correct data, you have {0} attempts", attempts);
 
+                //проси о ввести тип класу
                 int typeOfClass;
                 Console.WriteLine("Choose type: 1 = Product\t2 = Meat\t3 = Dairy");
                 input = Console.ReadLine();
@@ -115,6 +115,7 @@ namespace SigmaTask9
                     }
                     catch (Exception ex)
                     {
+                        //інакше видаляємо заготовку під об'єкт класу, зменшуємо спроби
                         storage.Products.RemoveAt(storage.Products.Count - 1);
                         Console.WriteLine(ex.Message);
                         Console.WriteLine("Wrong input");
