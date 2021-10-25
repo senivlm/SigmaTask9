@@ -107,128 +107,117 @@ namespace SigmaTask9.Products
         //m = "10:02:2001 32,32 5,5 30 1 1"
         public override void Parse(string str_object)
         {
-            try
-            {
-                string[] lineSplit = str_object.Split();
+            string[] lineSplit = str_object.Split();
 
-                //дата
-                string[] date = lineSplit[0].Split(':');
-                int day, month, year;
+            //дата
+            string[] date = lineSplit[0].Split(':');
+            int day, month, year;
 
-                if (!Int32.TryParse(date[1], out month) || (month < 1) || (month > 12))
-                {
-                    throw new ArgumentException("Wrong Month");
-                }
-                if (!Int32.TryParse(date[2], out year) || (year < 1900))
-                {
-                    throw new ArgumentException("Wrong Year");
-                }
-                //перевіряємо чи рік високосний
-                //і чи правильна кількість днів у місяці
-                if (Int32.TryParse(date[0], out day) && (day > 0))
-                {
-                    switch (month)
-                    {
-                        //31 день у місяці
-                        case 1:
-                        case 3:
-                        case 5:
-                        case 7:
-                        case 8:
-                        case 10:
-                        case 12:
-                            if (day > 31)
-                            {
-                                throw new ArgumentException("Day cannnot be >31");
-                            }
-                            break;
-                        //28 днів або 29 високосному році
-                        case 2:
-                            bool isLeapYear = false;
-                            //преевірка на високосність
-                            if (year % 4 == 0)
-                            {
-                                if ((year % 100 != 0) || (year % 100 == 0 && year % 400 == 0))
-                                {
-                                    isLeapYear = true;
-                                }
-                            }
-                            if (isLeapYear)
-                            {
-                                if (day > 29)
-                                {
-                                    throw new ArgumentException("Day cannnot be >29 in February, leap year");
-                                }
-                            }
-                            else
-                            {
-                                if (day > 28)
-                                {
-                                    throw new ArgumentException("Day cannnot be >28 in February, not leap year");
-                                }
-                            }
-                            break;
-                        //30 днів у місяці
-                        default:
-                            if (day > 30)
-                            {
-                                throw new ArgumentException("Day cannot be >30");
-                            }
-                            break;
-                    }
-                }
-                else
-                {
-                    throw new ArgumentException("Wrong Day");
-                }
-                //пройшли всі перевірки, свторюємо дату
-                this.CreationDay = new DateTime(year, month, day);
-                //ціна---
-                double price;
-                if (!Double.TryParse(lineSplit[1], out price) || (price < 0))
-                {
-                    throw new ArgumentException("Wrong Price");
-                }
-                this.PriceOfProduct = price;
-                //вага
-                double weight;
-                if (!Double.TryParse(lineSplit[2], out weight) || (weight < 0))
-                {
-                    throw new ArgumentException("Wrong Weight");
-                }
-                this.WeightOfProduct = weight;
-                //день придатності
-                int exDay;
-                if (!Int32.TryParse(lineSplit[3], out exDay) || (exDay <= 0))
-                {
-                    throw new ArgumentException("Wrong Expiration day");
-                }
-                this.ExpirationDay = exDay;
-                //категорія
-                int category;
-                if (!Int32.TryParse(lineSplit[4], out category) || (category < 1) || (category > 3))
-                {
-                    throw new ArgumentException("Wrong Expiration day");
-                }
-                //індекс масиву System.Array від 0 до 2
-                Category = (MeatCategories)Enum.GetValues(typeof(MeatCategories)).GetValue(category - 1);
-                //тип
-                int type;
-                if (!Int32.TryParse(lineSplit[5], out type) || (type < 1) || (type > 4))
-                {
-                    throw new ArgumentException("Wrong Expiration day");
-                }
-                //індекс масиву System.Array від 0 до 3
-                Type = (MeatTypes)Enum.GetValues(typeof(MeatTypes)).GetValue(type - 1);
-            }
-            catch (ArgumentException ex)
+            if (!Int32.TryParse(date[1], out month) || (month < 1) || (month > 12))
             {
-                Console.WriteLine(ex.Message);
+                throw new ArgumentException("Wrong Month");
             }
-            catch (Exception ex)
+            if (!Int32.TryParse(date[2], out year) || (year < 1900))
             {
-                Console.WriteLine(ex.Message);
+                throw new ArgumentException("Wrong Year");
             }
+            //перевіряємо чи рік високосний
+            //і чи правильна кількість днів у місяці
+            if (Int32.TryParse(date[0], out day) && (day > 0))
+            {
+                switch (month)
+                {
+                    //31 день у місяці
+                    case 1:
+                    case 3:
+                    case 5:
+                    case 7:
+                    case 8:
+                    case 10:
+                    case 12:
+                        if (day > 31)
+                        {
+                            throw new ArgumentException("Day cannnot be >31");
+                        }
+                        break;
+                    //28 днів або 29 високосному році
+                    case 2:
+                        bool isLeapYear = false;
+                        //преевірка на високосність
+                        if (year % 4 == 0)
+                        {
+                            if ((year % 100 != 0) || (year % 100 == 0 && year % 400 == 0))
+                            {
+                                isLeapYear = true;
+                            }
+                        }
+                        if (isLeapYear)
+                        {
+                            if (day > 29)
+                            {
+                                throw new ArgumentException("Day cannnot be >29 in February, leap year");
+                            }
+                        }
+                        else
+                        {
+                            if (day > 28)
+                            {
+                                throw new ArgumentException("Day cannnot be >28 in February, not leap year");
+                            }
+                        }
+                        break;
+                    //30 днів у місяці
+                    default:
+                        if (day > 30)
+                        {
+                            throw new ArgumentException("Day cannot be >30");
+                        }
+                        break;
+                }
+            }
+            else
+            {
+                throw new ArgumentException("Wrong Day");
+            }
+            //пройшли всі перевірки, свторюємо дату
+            this.CreationDay = new DateTime(year, month, day);
+            //ціна---
+            double price;
+            if (!Double.TryParse(lineSplit[1], out price) || (price < 0))
+            {
+                throw new ArgumentException("Wrong Price");
+            }
+            this.PriceOfProduct = price;
+            //вага
+            double weight;
+            if (!Double.TryParse(lineSplit[2], out weight) || (weight < 0))
+            {
+                throw new ArgumentException("Wrong Weight");
+            }
+            this.WeightOfProduct = weight;
+            //день придатності
+            int exDay;
+            if (!Int32.TryParse(lineSplit[3], out exDay) || (exDay <= 0))
+            {
+                throw new ArgumentException("Wrong Expiration day");
+            }
+            this.ExpirationDay = exDay;
+            //категорія
+            int category;
+            if (!Int32.TryParse(lineSplit[4], out category) || (category < 1) || (category > 3))
+            {
+                throw new ArgumentException("Wrong Expiration day");
+            }
+            //індекс масиву System.Array від 0 до 2
+            Category = (MeatCategories)Enum.GetValues(typeof(MeatCategories)).GetValue(category - 1);
+            //тип
+            int type;
+            if (!Int32.TryParse(lineSplit[5], out type) || (type < 1) || (type > 4))
+            {
+                throw new ArgumentException("Wrong Expiration day");
+            }
+            //індекс масиву System.Array від 0 до 3
+            Type = (MeatTypes)Enum.GetValues(typeof(MeatTypes)).GetValue(type - 1);
         }
     }
 }

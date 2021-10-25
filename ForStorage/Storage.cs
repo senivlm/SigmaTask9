@@ -9,14 +9,19 @@ using System.Threading.Tasks;
 
 namespace SigmaTask9.ForStorage
 {
-    
+
     class Storage
     {
 
-        public delegate void WriteSpoiledProductsToLogFile(Storage storage,string pathToLog);
+        public delegate void WriteSpoiledProductsToLogFile(Storage storage, string pathToLog);
+        public delegate void EnterCorrectData(Storage storage, string pathToLog);
+
+
+
 
         public event WriteSpoiledProductsToLogFile OnShowStorage;
-
+        public event EnterCorrectData OnIncorrectInput;
+        public string PathToLogFile { get; private set; }
 
         List<Product> products;
         //властивість
@@ -26,6 +31,7 @@ namespace SigmaTask9.ForStorage
         public Storage()
         {
             this.products = new List<Product>();
+            PathToLogFile = @"C:\Users\Acer\OneDrive\Робочий стіл\C#\SigmaTask9\LogFile.txt";
         }
 
         //ініціалізація через список-------------------------
@@ -109,7 +115,15 @@ namespace SigmaTask9.ForStorage
                 if (variety == 1)
                 {
                     //створюємо об'єкт з отриманих даних і додаємо в масив
-                    products.Add(ReadMeat());
+                    try
+                    {
+                        products.Add(ReadMeat());
+                    }
+                    catch (Exception ex)
+                    {
+                        OnIncorrectInput?.Invoke(this,PathToLogFile);
+                    }
+                    
                 }
                 //молочні
                 else if (variety == 2)
@@ -125,7 +139,7 @@ namespace SigmaTask9.ForStorage
         }
 
         //опрацювання на ріні класи------------------
-        private Meat ReadMeat()
+        public Meat ReadMeat()
         {
             string input;
             //загальні поля
@@ -194,7 +208,7 @@ namespace SigmaTask9.ForStorage
             //створюємо об'єкт з отриманих даних і додаємо в масив
             return new Meat(date, price, weight, "N/A", exDay, category, type);
         }
-        private DairyProduct ReadDairy()
+        public DairyProduct ReadDairy()
         {
             string input;
             //загальні поля
@@ -247,7 +261,7 @@ namespace SigmaTask9.ForStorage
 
             return new DairyProduct(date, price, weight, name, exDay);
         }
-        private Product ReadProduct()
+        public Product ReadProduct()
         {
             string input;
             //загальні поля
@@ -320,16 +334,29 @@ namespace SigmaTask9.ForStorage
                         if (elements == 5)
                         {
                             //попередньо створюємо об'єкт касу в списку
-                            products.Add(new Product());
-                            //міняємо цей об'єкт
-                            //у нас є функція приведення стрічки у об'єкти класу
-                            products[products.Count-1].Parse(line);
+                            //міняємо цей об'єкт у нас є функція приведення стрічки у об'єкти класу
+                            try
+                            {
+                                products.Add(new Product());
+                                products[products.Count - 1].Parse(line);
+                            }
+                            catch (Exception ex)
+                            {
+                                OnIncorrectInput?.Invoke(this, PathToLogFile);
+                            }
                         }
                         //якщо 6 елем, то це класс Meat
                         else if (elements == 6)
                         {
-                            products.Add(new Meat());
-                            products[products.Count - 1].Parse(line);
+                            try
+                            {
+                                products.Add(new Meat());
+                                products[products.Count - 1].Parse(line);
+                            }
+                            catch (Exception ex)
+                            {
+                                OnIncorrectInput?.Invoke(this, PathToLogFile);
+                            }
                         }
                         else
                         {
@@ -372,7 +399,7 @@ namespace SigmaTask9.ForStorage
         public override string ToString()
         {
             //викликаємо подію запису спорчених продуктів у файл
-            OnShowStorage?.Invoke(this,@"C:\Users\Acer\OneDrive\Робочий стіл\C#\SigmaTask9\RemovedProducts.txt");
+            OnShowStorage?.Invoke(this,PathToLogFile);
 
 
             string res = "";
