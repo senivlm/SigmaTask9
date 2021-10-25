@@ -67,10 +67,24 @@ namespace SigmaTask9
                     attempts--;
                     continue;
                 }
+                //ввели правильно, значить вийти
                 else
                     break;
             }
-            if (action == 2)
+            //якщо нема спроб, то просто записати у лог файл
+            if (attempts == 0)
+            {
+                Console.WriteLine("You have no more attempts");
+                Console.WriteLine("We will write incorrect product to log file\n");
+                WriteProductToLogFile(copy,pathToLog);
+            }
+            else if (action == 1)
+            {
+                Console.WriteLine("We will write product to log file\n");
+                WriteProductToLogFile(copy, pathToLog);
+            }
+            //виправити помилку 
+            else
             {
                 CorrectInput(storage);
             }
@@ -139,8 +153,9 @@ namespace SigmaTask9
         {
             using (StreamWriter writer = new StreamWriter(pathToLogFile,append:true))
             {
+                writer.WriteLine("Wrong data for product");
                 writer.WriteLine(product);
-                writer.WriteLine("Removed at Date: {0},\t Time: {1}\n", DateTime.Now.ToShortDateString(), DateTime.Now.ToShortTimeString());
+                writer.WriteLine("Time: {0},{1}\n", DateTime.Now.ToShortDateString(), DateTime.Now.ToShortTimeString());
             }
         }
     }

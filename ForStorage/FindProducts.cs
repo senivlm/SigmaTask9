@@ -5,6 +5,7 @@ using System.Text;
 
 namespace SigmaTask9.ForStorage
 {
+    //статичний клас з методами для находження продуктів за параметром----------------------------
     static class FindProducts
     {
         public static Product FindProductByName(Storage storage,string name)

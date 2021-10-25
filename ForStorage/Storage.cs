@@ -12,15 +12,17 @@ namespace SigmaTask9.ForStorage
 
     class Storage
     {
+        //делегат для спорчених продуктів
+        public delegate void SpoiledProductsHandler(Storage storage, string pathToLog);
+        //делегат для некореткних даних
+        public delegate void InCorrectDataHandler(Storage storage, string pathToLog);
 
-        public delegate void WriteSpoiledProductsToLogFile(Storage storage, string pathToLog);
-        public delegate void EnterCorrectData(Storage storage, string pathToLog);
 
-
-
-
-        public event WriteSpoiledProductsToLogFile OnShowStorage;
-        public event EnterCorrectData OnIncorrectInput;
+        //подія при виводі перевіряти спорені продукти
+        public event SpoiledProductsHandler OnShowStorage;
+        //подія при неправильних даних
+        public event InCorrectDataHandler OnIncorrectInput;
+        //шлях до лог файлу
         public string PathToLogFile { get; private set; }
 
         List<Product> products;
