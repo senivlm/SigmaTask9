@@ -35,3 +35,18 @@ Name: N/A	Price: 2,00$	Weight: 4,00kg
 Date of creation: 01.01.2020	Expiration day: 0
 Time: [26.10.2021,2:00:14]
 
+Error --> Wrong Expiration day: -10
+Name: Liana	Price: 4,30$	Weight: 5,40kg
+Date of creation: 15.10.2020	Expiration day: -10
+Time: [26.10.2021,2:10:08]
+
+Error --> Wrong price: -10
+Name: N/A	Price: 0,00$	Weight: 0,00kg
+Date of creation: 01.01.2020	Expiration day: 0
+Time: [26.10.2021,2:10:19]
+
+Error --> Wrong Month: 100
+Name: N/A	Price: 3,00$	Weight: 1,00kg
+Date of creation: 01.01.2020	Expiration day: 2
+Time: [26.10.2021,2:11:30]
+

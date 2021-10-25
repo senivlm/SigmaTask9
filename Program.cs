@@ -18,7 +18,7 @@ namespace SigmaTask9
             stor1.OnShowStorage += ForStorageEvents.CheckSpoiledProducts;
             stor1.OnIncorrectInput += ForStorageEvents.CheckWhatToDo;
 
-            stor1.ReadFromFile(pathRead);
+            //stor1.ReadFromFile(pathRead);
 
             stor1.ReadProductsFromConsole();
             
