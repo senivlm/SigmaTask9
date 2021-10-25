@@ -1,0 +1,16 @@
+Error --> Wrong Expiration day: -10
+Name: Liana	Price: 4,30$	Weight: 5,40kg
+Date of creation: 15.10.2020	Expiration day: -10
+Time: [26.10.2021,0:11:17]
+
+Info --> Expired
+Type: Veal	Category: I_sort
+Price: 2,32$	Weight: 2,50kg
+Date of creation: 10.02.2001	Expiration day: 30
+Removed at Time: [26.10.2021,0:11:17]
+
+Info --> Expired
+Name: Apple	Price: 4,30$	Weight: 5,40kg
+Date of creation: 15.10.2020	Expiration day: 30
+Removed at Time: [26.10.2021,0:11:17]
+

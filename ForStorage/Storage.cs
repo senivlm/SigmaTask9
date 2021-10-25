@@ -241,7 +241,7 @@ namespace SigmaTask9.ForStorage
                     {
                         writer.WriteLine("Info --> Expired");
                         writer.WriteLine(this.products[i]);
-                        writer.WriteLine("Removed at Date: {0},\t Time: {1}\n",DateTime.Now.ToShortDateString(), DateTime.Now.ToShortTimeString());
+                        writer.WriteLine("Removed at Time: [{0},{1}]\n",DateTime.Now.ToShortDateString(), DateTime.Now.ToLongTimeString());
                         RemoveByName(this.products[i].NameOfProduct);
                     }
                 }
