@@ -15,7 +15,7 @@ namespace SigmaTask9.ForStorage
         //делегат для спорчених продуктів
         public delegate void SpoiledProductsHandler(Storage storage, string pathToLog);
         //делегат для некореткних даних
-        public delegate void InCorrectDataHandler(Storage storage, string pathToLog);
+        public delegate void InCorrectDataHandler(Storage storage, string pathToLog,string message);
 
 
         //подія при виводі перевіряти спорені продукти
@@ -86,7 +86,7 @@ namespace SigmaTask9.ForStorage
         }
 
         //зчитати з консолі------------------------------------
-        public void ReadFromConsole()
+        public void ReadProductsFromConsole()
         {
             string input;
             int variety;
@@ -119,200 +119,48 @@ namespace SigmaTask9.ForStorage
                     //створюємо об'єкт з отриманих даних і додаємо в масив
                     try
                     {
-                        products.Add(ReadMeat());
+                        products.Add(new Meat());
+                        products[products.Count - 1].ReadFromConsole();
                     }
                     catch (Exception ex)
                     {
-                        OnIncorrectInput?.Invoke(this,PathToLogFile);
+                        OnIncorrectInput?.Invoke(this,PathToLogFile, ex.Message);
                     }
                     
                 }
                 //молочні
                 else if (variety == 2)
                 {
-                    products.Add(ReadDairy());
+                    try
+                    {
+                        products.Add(new DairyProduct());
+                        products[products.Count - 1].ReadFromConsole();
+                    }
+                    catch (Exception ex)
+                    {
+                        OnIncorrectInput?.Invoke(this,PathToLogFile, ex.Message);
+                    }
+                    
                 }
                 //звичайний
                 else
                 {
-                    products.Add(ReadProduct());
+                    try
+                    {
+                        products.Add(new Product());
+                        products[products.Count - 1].ReadFromConsole();
+                    }
+                    catch (Exception ex)
+                    {
+                        OnIncorrectInput?.Invoke(this, PathToLogFile, ex.Message);
+                    }
+                    
                 }
             }
         }
 
-        //опрацювання на ріні класи------------------
-        public Meat ReadMeat()
-        {
-            string input;
-            //загальні поля
-            double price;
-            double weight;
-            string name;
-            int exDay;
-            DateTime date;
-            //уточняємо інформацію по виду продукту
-            //м'ясо
-            int category;
-            int type;
-            //тип м'яса (одночасно це і його ім'я)
-            Console.WriteLine("Choose type: 1->Lamb\t2->Veal\t3->Pork\t4->Chicken");
-            input = Console.ReadLine();
-            while ((!Int32.TryParse(input, out type)) || (type < 1) || (type > 4))
-            {
-                Console.WriteLine("Wrong input");
-                input = Console.ReadLine();
-            }
-            //категорія
-            Console.WriteLine("Choose category: 1->High_sort\t 2->I_sort\t3->II_sort");
-            input = Console.ReadLine();
-            while ((!Int32.TryParse(input, out category)) || (category < 1) || (category > 3))
-            {
-                Console.WriteLine("Wrong input");
-                input = Console.ReadLine();
-            }
-            //ціну
-            Console.WriteLine("Write price(>0)");
-            input = Console.ReadLine();
-            while ((!Double.TryParse(input, out price)) || (price < 0))
-            {
-                Console.WriteLine("Wrong input");
-                input = Console.ReadLine();
-            }
-            //вага
-            Console.WriteLine("Write weight(>0)");
-            input = Console.ReadLine();
-            while ((!Double.TryParse(input, out weight)) || (weight < 0))
-            {
-                Console.WriteLine("Wrong input");
-                input = Console.ReadLine();
-            }
-            //дні придатності
-            Console.WriteLine("Write Expitation day(>0)");
-            input = Console.ReadLine();
-            while ((!Int32.TryParse(input, out exDay)) || (exDay < 0))
-            {
-                Console.WriteLine("Wrong input");
-                input = Console.ReadLine();
-            }
-            //дата створення
-            Console.WriteLine("Write creation date(12:08:2001)");
-            input = Console.ReadLine();
-            string[] str_date = input.Split(':');
-            int day, month, year;
-            while (!Int32.TryParse(str_date[0], out day) || (day < 1) ||
-                !Int32.TryParse(str_date[1], out month) || (month < 1) ||
-                !Int32.TryParse(str_date[2], out year) || (year < 1900))
-            {
-                Console.WriteLine("Wrong Date");
-                input = Console.ReadLine();
-            }
-            date = new DateTime(year, month, day);
-            //створюємо об'єкт з отриманих даних і додаємо в масив
-            return new Meat(date, price, weight, "N/A", exDay, category, type);
-        }
-        public DairyProduct ReadDairy()
-        {
-            string input;
-            //загальні поля
-            double price;
-            double weight;
-            string name;
-            int exDay;
-            DateTime date;
-
-            //ім'я продукту
-            Console.WriteLine("Write name of product");
-            name = Console.ReadLine();
-            //ціна
-            Console.WriteLine("Write price(>0)");
-            input = Console.ReadLine();
-            while ((!Double.TryParse(input, out price)) || (price < 0))
-            {
-                Console.WriteLine("Wrong input");
-                input = Console.ReadLine();
-            }
-            //вага
-            Console.WriteLine("Write weight(>0)");
-            input = Console.ReadLine();
-            while ((!Double.TryParse(input, out weight)) || (weight < 0))
-            {
-                Console.WriteLine("Wrong input");
-                input = Console.ReadLine();
-            }
-            //дні придатності
-            Console.WriteLine("Write Expitation day(>0)");
-            input = Console.ReadLine();
-            while ((!Int32.TryParse(input, out exDay)) || (exDay < 0))
-            {
-                Console.WriteLine("Wrong input");
-                input = Console.ReadLine();
-            }
-            //дата створення
-            Console.WriteLine("Write creation date(12:08:2001)");
-            input = Console.ReadLine();
-            string[] str_date = input.Split(':');
-            int day, month, year;
-            while (!Int32.TryParse(str_date[0], out day) || (day < 1) ||
-                !Int32.TryParse(str_date[1], out month) || (month < 1) ||
-                !Int32.TryParse(str_date[2], out year) || (year < 1900))
-            {
-                Console.WriteLine("Wrong Date");
-                input = Console.ReadLine();
-            }
-            date = new DateTime(year, month, day);
-
-            return new DairyProduct(date, price, weight, name, exDay);
-        }
-        public Product ReadProduct()
-        {
-            string input;
-            //загальні поля
-            double price;
-            double weight;
-            string name;
-            int exDay;
-            DateTime date;
-            //все те саме, але без спеціальних особливостей
-            Console.WriteLine("Write price(>0)");
-            input = Console.ReadLine();
-            while ((!Double.TryParse(input, out price)) || (price < 0))
-            {
-                Console.WriteLine("Wrong input");
-                input = Console.ReadLine();
-            }
-            Console.WriteLine("Write weight(>0)");
-            input = Console.ReadLine();
-            while ((!Double.TryParse(input, out weight)) || (weight < 0))
-            {
-                Console.WriteLine("Wrong input");
-                input = Console.ReadLine();
-            }
-            Console.WriteLine("Write name of product");
-            name = Console.ReadLine();
-            //дні придатності
-            Console.WriteLine("Write Expitation day(>0)");
-            input = Console.ReadLine();
-            while ((!Int32.TryParse(input, out exDay)) || (exDay < 0))
-            {
-                Console.WriteLine("Wrong input");
-                input = Console.ReadLine();
-            }
-            //дата створення
-            Console.WriteLine("Write creation date(12:08:2001)");
-            input = Console.ReadLine();
-            string[] str_date = input.Split(':');
-            int day, month, year;
-            while (!Int32.TryParse(str_date[0], out day) || (day < 1) ||
-                !Int32.TryParse(str_date[1], out month) || (month < 1) ||
-                !Int32.TryParse(str_date[2], out year) || (year < 1900))
-            {
-                Console.WriteLine("Wrong Date");
-                input = Console.ReadLine();
-            }
-            date = new DateTime(year, month, day);
-
-            return new Product(date, price, weight, name, exDay);
-        }
+        
+        
 
         //отримати інформацію з файлу--------------------
         public void ReadFromFile(string path)
@@ -344,12 +192,14 @@ namespace SigmaTask9.ForStorage
                             }
                             catch (Exception ex)
                             {
-                                OnIncorrectInput?.Invoke(this, PathToLogFile);
+                                OnIncorrectInput?.Invoke(this, PathToLogFile,ex.Message);
                             }
                         }
                         //якщо 6 елем, то це класс Meat
                         else if (elements == 6)
                         {
+                            //при виникнені помилки, ми опрацюємо неправильні дані
+                            //і зчитування продовжиться далі
                             try
                             {
                                 products.Add(new Meat());
@@ -357,7 +207,7 @@ namespace SigmaTask9.ForStorage
                             }
                             catch (Exception ex)
                             {
-                                OnIncorrectInput?.Invoke(this, PathToLogFile);
+                                OnIncorrectInput?.Invoke(this, PathToLogFile, ex.Message);
                             }
                         }
                         else

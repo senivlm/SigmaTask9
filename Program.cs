@@ -9,29 +9,19 @@ namespace SigmaTask9
     {
         static void Main(string[] args)
         {
-            //test=================================
-            try
-            {
-                for (int i = 0; i < 10; i++)
-                {
-                    if (i == 4)
-                        throw new Exception();
-                    Console.WriteLine("i is {0}",i);
-                }
-            }
-            catch (Exception ex) { }
-            //=======================================
 
             string pathRead = @"C:\Users\Acer\OneDrive\Робочий стіл\C#\SigmaTask9\StorageInfo.txt";
 
             Storage stor1 = new Storage();
+
+            //визначення подій----------------------
             stor1.OnShowStorage += CheckSpoiledProducts;
             stor1.OnIncorrectInput += CheckWhatToDo;
 
+            //stor1.ReadFromFile(pathRead);
 
-            stor1.ReadFromFile(pathRead);
+            stor1.ReadProductsFromConsole();
             
-
 
             Console.WriteLine(stor1);
 
@@ -46,12 +36,15 @@ namespace SigmaTask9
             storage.CheckExpirationDate(pathToLog);
         }
         //фукція для події при неправильному вводі
-        public static void CheckWhatToDo(Storage storage, string pathToLog)
+        //опрацє неправильні дані і продовжить роботу при зчитуванні інформації
+        public static void CheckWhatToDo(Storage storage, string pathToLog, string message)
         {
             //копіюємо неправильно введені дані
             Product copy = storage[storage.Products.Count - 1];
             //видаляємо неправильно введені дані
             storage.Products.RemoveAt(storage.Products.Count-1);
+
+            Console.WriteLine("Error : {0}", message);
 
             //вибираємо, що робити
             int attempts = 3;
@@ -76,12 +69,12 @@ namespace SigmaTask9
             {
                 Console.WriteLine("You have no more attempts");
                 Console.WriteLine("We will write incorrect product to log file\n");
-                WriteProductToLogFile(copy,pathToLog);
+                WriteProductToLogFile(copy,pathToLog,message);
             }
             else if (action == 1)
             {
                 Console.WriteLine("We will write product to log file\n");
-                WriteProductToLogFile(copy, pathToLog);
+                WriteProductToLogFile(copy, pathToLog, message);
             }
             //виправити помилку 
             else
@@ -101,7 +94,7 @@ namespace SigmaTask9
                 Console.WriteLine("Enter correct data, you have {0} attempts", attempts);
 
                 int typeOfClass;
-                Console.WriteLine("Choose type: 1 = Product\t2 = Meat");
+                Console.WriteLine("Choose type: 1 = Product\t2 = Meat\t3 = Dairy");
                 input = Console.ReadLine();
                 if(!Int32.TryParse(input,out typeOfClass)||(typeOfClass<1)||(typeOfClass>2))
                 {
@@ -114,11 +107,13 @@ namespace SigmaTask9
                     try
                     {
                         //якщо успішно зчитаємо, то кінець
-                        storage.Add(storage.ReadProduct());
+                        storage.Add(new Product());
+                        storage[storage.Products.Count - 1].ReadFromConsole();
                         break;
                     }
                     catch (Exception ex)
                     {
+                        storage.Products.RemoveAt(storage.Products.Count - 1);
                         Console.WriteLine(ex.Message);
                         Console.WriteLine("Wrong input");
                         attempts--;
@@ -130,11 +125,31 @@ namespace SigmaTask9
                     try
                     {
                         //якщо успішно зчитаємо, то кінець
-                        storage.Add(storage.ReadMeat());
+                        storage.Add(new Meat());
+                        storage[storage.Products.Count - 1].ReadFromConsole();
                         break;
                     }
                     catch (Exception ex)
                     {
+                        storage.Products.RemoveAt(storage.Products.Count - 1);
+                        Console.WriteLine(ex.Message);
+                        Console.WriteLine("Wrong input");
+                        attempts--;
+                        continue;
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        //якщо успішно зчитаємо, то кінець
+                        storage.Add(new DairyProduct());
+                        storage[storage.Products.Count - 1].ReadFromConsole();
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        storage.Products.RemoveAt(storage.Products.Count - 1);
                         Console.WriteLine(ex.Message);
                         Console.WriteLine("Wrong input");
                         attempts--;
@@ -149,13 +164,14 @@ namespace SigmaTask9
                 storage.Add(new Product(new DateTime(2021,10,4), 2.3, 5, "Soda", 30));
             }
         }
-        public static void WriteProductToLogFile(Product product, string pathToLogFile)
+        //записати у лог файл
+        public static void WriteProductToLogFile(Product product, string pathToLogFile, string message)
         {
             using (StreamWriter writer = new StreamWriter(pathToLogFile,append:true))
             {
-                writer.WriteLine("Wrong data for product");
+                writer.WriteLine("Error : {0}",message);
                 writer.WriteLine(product);
-                writer.WriteLine("Time: {0},{1}\n", DateTime.Now.ToShortDateString(), DateTime.Now.ToShortTimeString());
+                writer.WriteLine("Time: [{0},{1}]\n", DateTime.Now.ToShortDateString(), DateTime.Now.ToLongTimeString());
             }
         }
     }
