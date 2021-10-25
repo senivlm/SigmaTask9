@@ -96,22 +96,22 @@ namespace SigmaTask9.ForStorage
             input = Console.ReadLine();
 
             //поки не отримуємо потрібне число
-            while ((!Int32.TryParse(input, out sizeOfArr)) || (sizeOfArr < 0))
+            if ((!Int32.TryParse(input, out sizeOfArr)) || (sizeOfArr < 0))
             {
-                Console.WriteLine("Wrong input");
-                input = Console.ReadLine();
+                Console.WriteLine("Wrong input, will be 2 instead");
+                sizeOfArr = 2;
             }
             //оновлюємо розмір масиву
             products.Clear();
             for (int counter = 0; counter < sizeOfArr; counter++)
             {
-                //вибираємо варіант product
+                //вибираємо варіант класу product
                 Console.WriteLine("Choose variety: 1->Meat\t 2->Dairy Product\t 3->Product");
                 input = Console.ReadLine();
-                while ((!Int32.TryParse(input, out variety)) || (variety < 1) || (variety > 3))
+                if((!Int32.TryParse(input, out variety)) || (variety < 1) || (variety > 3))
                 {
-                    Console.WriteLine("Wrong input");
-                    input = Console.ReadLine();
+                    Console.WriteLine("Wrong input, will be 3 instead");
+                    variety = 3;
                 }
                 //м'ясний
                 if (variety == 1)
@@ -239,6 +239,7 @@ namespace SigmaTask9.ForStorage
                     //зписуємо у файл і вилучаємо
                     if (daysPassed > this.products[i].ExpirationDay)
                     {
+                        writer.WriteLine("Info --> Expired");
                         writer.WriteLine(this.products[i]);
                         writer.WriteLine("Removed at Date: {0},\t Time: {1}\n",DateTime.Now.ToShortDateString(), DateTime.Now.ToShortTimeString());
                         RemoveByName(this.products[i].NameOfProduct);

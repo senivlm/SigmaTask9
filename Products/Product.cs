@@ -222,7 +222,7 @@ namespace SigmaTask9.Products
             //ціну
             Console.WriteLine("Write price(>0)");
             input = Console.ReadLine();
-            if ((!Double.TryParse(input, out price)) || (price < 0))
+            if ((!Double.TryParse(input, out price)) || (price <= 0))
             {
                 throw new ArgumentException(string.Format("Wrong price: {0}", price));
             }
@@ -230,7 +230,7 @@ namespace SigmaTask9.Products
             //вага
             Console.WriteLine("Write weight(>0)");
             input = Console.ReadLine();
-            if ((!Double.TryParse(input, out weight)) || (weight < 0))
+            if ((!Double.TryParse(input, out weight)) || (weight <= 0))
             {
                 throw new ArgumentException(string.Format("Wrong weight: {0}", weight));
             }

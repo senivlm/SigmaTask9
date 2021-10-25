@@ -107,7 +107,7 @@ namespace SigmaTask9.Products
         public override void Parse(string str_object)
         {
             string[] lineSplit = str_object.Split();
-            if (lineSplit.Length != 5)
+            if (lineSplit.Length != 6)
             {
                 throw new FormatException(string.Format("Wrong input string: {0}", str_object));
             }
@@ -188,20 +188,18 @@ namespace SigmaTask9.Products
             }
             //пройшли всі перевірки, свторюємо дату
             this.CreationDay = new DateTime(year, month, day);
-            //ціна
+            //ціна---------
             if (!Double.TryParse(lineSplit[1], out this.priceOfProduct) || (PriceOfProduct < 0))
             {
                 throw new ArgumentException(string.Format("Wrong Price: {0}", PriceOfProduct));
             }
-            //вага
+            //вага-----------
             if (!Double.TryParse(lineSplit[2], out this.weightOfProduct) || (WeightOfProduct < 0))
             {
                 throw new ArgumentException(string.Format("Wrong Weight: {0}", WeightOfProduct));
             }
-            //назва
-            NameOfProduct = lineSplit[3];
             //день придатності
-            if (!Int32.TryParse(lineSplit[4], out this.expirationDate) || (ExpirationDay <= 0))
+            if (!Int32.TryParse(lineSplit[3], out this.expirationDate) || (ExpirationDay <= 0))
             {
                 throw new ArgumentException(string.Format("Wrong Expiration day: {0}", expirationDate));
             }
@@ -254,7 +252,7 @@ namespace SigmaTask9.Products
             //ціну
             Console.WriteLine("Write price(>0)");
             input = Console.ReadLine();
-            if ((!Double.TryParse(input, out price)) || (price < 0))
+            if ((!Double.TryParse(input, out price)) || (price <= 0))
             {
                 throw new ArgumentException(string.Format("Wrong price: {0}",price));
             }
@@ -262,7 +260,7 @@ namespace SigmaTask9.Products
             //вага
             Console.WriteLine("Write weight(>0)");
             input = Console.ReadLine();
-            if ((!Double.TryParse(input, out weight)) || (weight < 0))
+            if ((!Double.TryParse(input, out weight)) || (weight <= 0 ))
             {
                 throw new ArgumentException(string.Format("Wrong weight: {0}", weight));
             }
