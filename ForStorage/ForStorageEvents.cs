@@ -15,15 +15,18 @@ namespace SigmaTask9.ForStorage
             storage.CheckExpirationDate(pathToLog);
         }
 
+
+
         //фукція для події при неправильному вводі===============
         //опрацює неправильні дані і продовжить роботу при зчитуванні інформації
+        //message - конкретна інформація про Exception і на якій змінній
         public static void CheckWhatToDo(Storage storage, string pathToLog, string message)
         {
-            //копіюємо неправильно введені дані
+            //копіюємо неправильно введений продукт, для запису у файл
             Product copy = storage[storage.Products.Count - 1];
             //видаляємо неправильно введені дані
             storage.Products.RemoveAt(storage.Products.Count - 1);
-
+            //виводимо помилку, що сталась, разом з інформацією про неї
             Console.WriteLine("\nError : {0}", message);
 
             //вибираємо, що робити
@@ -73,7 +76,7 @@ namespace SigmaTask9.ForStorage
                 string input;
                 Console.WriteLine("\nEnter correct data, you have {0} attempts", attempts);
 
-                //проси о ввести тип класу
+                //просить ввести тип класу
                 int typeOfClass;
                 Console.WriteLine("Choose type: 1 = Product\t2 = Meat\t3 = Dairy");
                 input = Console.ReadLine();
@@ -106,7 +109,6 @@ namespace SigmaTask9.ForStorage
                 {
                     try
                     {
-                        //якщо успішно зчитаємо, то кінець
                         storage.Add(new Meat());
                         storage[storage.Products.Count - 1].ReadFromConsole();
                         break;
@@ -124,7 +126,6 @@ namespace SigmaTask9.ForStorage
                 {
                     try
                     {
-                        //якщо успішно зчитаємо, то кінець
                         storage.Add(new DairyProduct());
                         storage[storage.Products.Count - 1].ReadFromConsole();
                         break;
