@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SigmaTask9.Storage
+namespace SigmaTask9.ForStorage
 {
     static class StorageFunctions
     {

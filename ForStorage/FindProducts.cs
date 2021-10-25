@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SigmaTask9.Storage
+namespace SigmaTask9.ForStorage
 {
     static class FindProducts
     {

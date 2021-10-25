@@ -7,15 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SigmaTask9.Storage
+namespace SigmaTask9.ForStorage
 {
     
     class Storage
     {
 
+        public delegate void WriteSpoiledProductsToLogFile(Storage storage,string pathToLog);
 
-
-
+        public event WriteSpoiledProductsToLogFile OnShowStorage;
 
 
         List<Product> products;
@@ -371,6 +371,10 @@ namespace SigmaTask9.Storage
         //вивестю всю інформацію-----------------
         public override string ToString()
         {
+            //викликаємо подію запису спорчених продуктів у файл
+            OnShowStorage?.Invoke(this,@"C:\Users\Acer\OneDrive\Робочий стіл\C#\SigmaTask9\RemovedProducts.txt");
+
+
             string res = "";
             for (int i = 0; i < products.Count; i++)
             {
