@@ -24,6 +24,7 @@ namespace SigmaTask9.ForStorage
         {
             //копіюємо неправильно введений продукт, для запису у файл
             Product copy = storage[storage.Products.Count - 1];
+            // У Storage мали б не попадати некоректні дані.
             //видаляємо неправильно введені дані
             storage.Products.RemoveAt(storage.Products.Count - 1);
             //виводимо помилку, що сталась, разом з інформацією про неї
